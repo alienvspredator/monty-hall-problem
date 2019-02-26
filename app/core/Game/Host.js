@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 const {Door} = require('./Door');
+const {RandomGenerator} = require('../RandomGenerator');
 
 /**
  * @enum {ERROR_MESSAGES} Error messages
@@ -26,20 +27,30 @@ class Host {
   }
 
   /**
-   * Opens random door
-   * @return {Door} Opened door
+   * Opens all but random one possible doors
    */
   openAllPossibleDoors() {
-    for (const door of this._canOpenDoorsList) {
-      door.opened = true;
-    }
+    const doorList = this._canOpenDoorsList;
+    const lenght = doorList.length;
+    const randomInt = RandomGenerator.generatePseudoRandomInt({
+      min: 0,
+      max: lenght - 1,
+    });
 
-    return this._canOpenDoorsList;
+    if (doorList.length > 1) {
+      const randomDoor = doorList[randomInt];
+      for (const door of doorList) {
+        if (door != randomDoor) {
+          door.opened = true;
+        }
+      }
+    } else {
+      doorList[0].opened = true;
+    }
   }
 
   /**
-   * Host can't open door
-   * @param {Door} door
+   * @param {Door} door Host can't open this door
    */
   removeDoorFromCanOpenDoors(door) {
     const doorIndex = this._canOpenDoorsList.indexOf(door);

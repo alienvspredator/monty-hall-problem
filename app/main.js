@@ -1,3 +1,6 @@
+// Import Door to use in JSDoc
+// eslint-disable-next-line no-unused-vars
+const {Door} = require('./core/Game/Door');
 const {GameController} = require('./core/Game/GameController');
 const {Game} = require('./core/Game/Game');
 const {Player} = require('./core/Game/Player');
@@ -26,9 +29,24 @@ Number of failures: ${fails} (${fails / iter * 100}%)`;
 }
 
 /**
+ * Returns closed not selected door
+ * @param {Door[]} doorList Door list
+ * @param {Door} selectedDoor Index of selected door
+ * @return {Door} Door index
+ */
+function switchDoor(doorList, selectedDoor) {
+  for (const door of doorList) {
+    if (door != selectedDoor && !door.opened) {
+      return door;
+    }
+  }
+}
+
+/**
+ * @param {'switch'|'not-switch'} tactic Tactic of Monty Hall Game
  * @return {Boolean} True if player opened win door.
  */
-function playMontyHallGameNotSwitch() {
+function playMontyHallGame(tactic) {
   const doorsCount = 3;
   const player = new Player();
   const game = new Game(doorsCount, player);
@@ -38,9 +56,21 @@ function playMontyHallGameNotSwitch() {
   );
 
   gameController.hostOpenPossibleDoors();
+
+  let doorIdToOpen;
+  if (tactic === 'switch') {
+    const doors = game.doors;
+    const selectedDoor = doors[player.selectedDoorId];
+    const doorToOpen = switchDoor(doors, selectedDoor);
+    doorIdToOpen = doors.indexOf(doorToOpen);
+  } else if (tactic === 'not-switch') {
+    doorIdToOpen = player.selectedDoorId;
+  }
+
   const win = gameController.playerOpenDoor(
-      player, player.selectedDoorId
+      player, doorIdToOpen
   );
+
   return win;
 }
 
@@ -48,22 +78,30 @@ function playMontyHallGameNotSwitch() {
  * Main function
  */
 function main() {
-  const statistic = {
-    tactic: 'Not-switch',
+  const statistics = [{
+    tactic: 'not-switch',
     iter: 0,
     wins: 0,
-
-  };
+  }, {
+    tactic: 'switch',
+    iter: 0,
+    wins: 0,
+  }];
 
   for (let i = 0; i < 1000000; i += 1) {
-    const win = playMontyHallGameNotSwitch();
-    statistic.iter += 1;
-    if (win) {
-      statistic.wins += 1;
+    for (const statistic of statistics) {
+      const win = playMontyHallGame(statistic.tactic);
+      statistic.iter += 1;
+      if (win) {
+        statistic.wins += 1;
+      }
     }
   }
 
-  console.log(generateStatistic(statistic));
+  for (const statistic of statistics) {
+    console.log(generateStatistic(statistic));
+    console.log('——————————————————————————');
+  }
 };
 
 main();

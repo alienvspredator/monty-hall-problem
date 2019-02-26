@@ -1,0 +1,22 @@
+{
+  "name": "monty-hall-problem",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app/main.js",
+  "scripts": {
+    "start": "node .",
+    "debug-start": "node --inspect-brk=5858 .",
+    "test": "mocha ./test/",
+    "debug-test": "mocha --inspect-brk=5858 ./test/"
+  },
+  "keywords": [],
+  "author": "Danylo Shevchenko",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "assert": "1.4.1",
+    "eslint": "^5.14.1",
+    "eslint-config-google": "^0.12.0",
+    "mocha": "6.0.1"
+  }
+}

@@ -9,22 +9,16 @@
       "request": "launch",
       "name": "Debug NPM",
       "runtimeExecutable": "npm",
-      "runtimeArgs": [
-        "run",
-        "debug-start",
-      ],
-      "port": 5858,
+      "runtimeArgs": ["run", "debug-start"],
+      "port": 5858
     },
     {
       "type": "node",
       "request": "launch",
       "name": "Debug Test",
       "runtimeExecutable": "npm",
-      "runtimeArgs": [
-        "run",
-        "debug-test"
-      ],
+      "runtimeArgs": ["run", "debug-test"],
       "port": 5858
-    },
+    }
   ]
 }

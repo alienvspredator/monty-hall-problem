@@ -18,12 +18,11 @@ function generateStatistic(statistic) {
   const {tactic, iter, wins} = statistic;
   const fails = iter - wins;
 
-  const statisticString =
-`Games statistic:
+  const statisticString = `Games statistic:
 Tactic: ${tactic}
 Iterations: ${iter}
-Number of wins: ${wins} (${wins / iter * 100}%)
-Number of failures: ${fails} (${fails / iter * 100}%)`;
+Number of wins: ${wins} (${(wins / iter) * 100}%)
+Number of failures: ${fails} (${(fails / iter) * 100}%)`;
 
   return statisticString;
 }
@@ -51,7 +50,8 @@ function playMontyHallGame(tactic) {
   const player = new Player();
   const game = new Game(doorsCount, player);
   const gameController = new GameController(game);
-  gameController.setPlayerSelectedDoor(player,
+  gameController.setPlayerSelectedDoor(
+      player,
       RandomGenerator.generatePseudoRandomInt({min: 0, max: doorsCount - 1})
   );
 
@@ -67,9 +67,7 @@ function playMontyHallGame(tactic) {
     doorIdToOpen = player.selectedDoorId;
   }
 
-  const win = gameController.playerOpenDoor(
-      player, doorIdToOpen
-  );
+  const win = gameController.playerOpenDoor(player, doorIdToOpen);
 
   return win;
 }
@@ -78,15 +76,18 @@ function playMontyHallGame(tactic) {
  * Main function
  */
 function main() {
-  const statistics = [{
-    tactic: 'not-switch',
-    iter: 0,
-    wins: 0,
-  }, {
-    tactic: 'switch',
-    iter: 0,
-    wins: 0,
-  }];
+  const statistics = [
+    {
+      tactic: 'not-switch',
+      iter: 0,
+      wins: 0,
+    },
+    {
+      tactic: 'switch',
+      iter: 0,
+      wins: 0,
+    },
+  ];
 
   for (let i = 0; i < 1000000; i += 1) {
     for (const statistic of statistics) {
@@ -102,6 +103,6 @@ function main() {
     console.log(generateStatistic(statistic));
     console.log('——————————————————————————');
   }
-};
+}
 
 main();
